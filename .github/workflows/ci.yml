@@ -21,7 +21,7 @@ jobs:
     - name: Compile code
       run: mvn compile
   test:
-    name: Unit-Test
+    name: Test
     runs-on: ubuntu-latest
 
     steps:
@@ -36,7 +36,7 @@ jobs:
         run: mvn clean verify -DskipTests
   build:
     runs-on: ubuntu-latest
-    name: Generate coverage report
+    name: Build
     needs: test
     steps:
       - name: Set up JDK 1.8
@@ -44,8 +44,8 @@ jobs:
         with:
           java-version: 1.8
       - name: Build with Maven
-        run: mvn -B package --file pom.xml -Dmaven.test.skip=true
-      - name: generate report codecov
+        run: mvn -B package  -Dmaven.test.skip=true
+      - name: Generate codecov report
         run: mvn cobertura:cobertura
       - name: Upload coverage
         if: success()
@@ -56,6 +56,7 @@ jobs:
         shell: bash
   release:
     needs:  build
+    name: Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -69,6 +70,7 @@ jobs:
             @semantic-release/changelog
   publish-Docker:
     needs:  release
+    name: Publish To Docker
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
