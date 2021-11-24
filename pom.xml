@@ -170,9 +170,9 @@
                                     </excludes>
                                     <limits>
                                         <limit implementation="org.jacoco.report.check.Limit">
-                                            <counter>LINE</counter>
+                                            <counter>CLASS</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>80%</minimum>
+                                            <minimum>50%</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
