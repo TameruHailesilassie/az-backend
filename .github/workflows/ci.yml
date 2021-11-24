@@ -70,9 +70,10 @@ jobs:
         with:
           semantic_version: 16
           extra_plugins: |
+            @semantic-release/git 
             @semantic-release/changelog
-            @semantic-release/git
-            conventional-changelog-eslint
+            @semantic-release/exec
+          
           branches: |
             ['master']
         env:
