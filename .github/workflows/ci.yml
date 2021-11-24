@@ -33,7 +33,7 @@ jobs:
       - name: Maven Package
         run: mvn clean package
       - name: Maven Verify
-        run: mvn clean verify -DskipTests
+        run: mvn clean verify
   build:
     runs-on: ubuntu-latest
     name: Build
