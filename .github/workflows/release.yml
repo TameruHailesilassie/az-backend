@@ -21,6 +21,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - name: Download jar for Docker Job
+        uses: actions/download-artifact@v1
+        with:
+            name: jarpack # The jar package will be checkout: jarpack/...jar
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
