@@ -28,4 +28,4 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_PASS }}
           tags: "latest,${{ env.RELEASE_VERSION }}"
-          buildoptions: "--compress --force-rm"
+
