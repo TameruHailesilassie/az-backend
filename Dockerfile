@@ -1,21 +1,9 @@
-#
-# Build stage
-#
-FROM maven:3.6.0-jdk-8-slim AS build
-COPY src /home/app/src
-COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean package
+FROM maven:3.5.2-jdk-8-alpine AS MAVEN_ENV
+WORKDIR /build/
+COPY pom.xml /build
+COPY src /build/src
+RUN mvn clean package -DskipTests=true
 
-#
-# Package stage
-#
-FROM openjdk:8-jre
-ARG PROFILE
-ENV PROFILE_VAR=$PROFILE
-VOLUME /tmp
-# Add the built jar for docker image building
-ADD target/ehr_Api.jar ehr_Api-action.jar
-ENTRYPOINT ["/bin/bash", "-c", "java","-Dspring.profiles.active=$PROFILE_VAR","-jar","/ehr_Api-action.jar"]
-# DO NOT USE(The variable would not be substituted): ENTRYPOINT ["java","-Dspring.profiles.active=$PROFILE_VAR","-jar","/hello-world-docker-action.jar"]
-# CAN ALSO USE: ENTRYPOINT java -Dspring.profiles.active=$PROFILE_VAR -jar /hello-world-docker-action.jar
-EXPOSE 80
+FROM openjdk:8-jre-alpine
+COPY  --from=MAVEN_ENV /build/target/ehr_Api-*.jar ehr_Api.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
