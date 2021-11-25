@@ -9,13 +9,12 @@ on:
 jobs:
   release:
     name: "Release"
-    needs: build
     runs-on: "ubuntu-latest"
     steps:
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.PAT }}"
-          prerelease: false
+          prerelease: ture
   publish-Docker:
     needs: release
     name: Publish To Docker
