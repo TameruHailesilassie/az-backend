@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.otlichno</groupId>
     <artifactId>Ehr</artifactId>
-    <version>0.3.16</version>
+    <version>0.3.17</version>
     <name>EhrAPI</name>
     <description>EhrAPI</description>
     <properties>
