@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.15](https://github.com/TameruHailesilassie/ehr-spring/compare/v0.1.1...v0.3.15) (2021-11-26)
+
 ### [0.1.1](https://github.com/TameruHailesilassie/ehr-spring/compare/v0.3.14...v0.1.1) (2021-11-26)
 
 ### [0.3.14](https://github.com/TameruHailesilassie/ehr-spring/compare/v0.3.13...v0.3.14) (2021-11-26)
