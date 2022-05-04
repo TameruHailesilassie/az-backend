@@ -8,7 +8,7 @@
         <version>2.5.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.otlichno</groupId>
+    <groupId>com.softech</groupId>
     <artifactId>Ehr</artifactId>
     <version>0.3.17</version>
     <name>EhrAPI</name>
@@ -212,7 +212,7 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <configLocation>src/main/java/com/otlichno/ehr/configuration/ivans_checkstyle_config.xml
+                    <configLocation>src/main/java/com/softech/ehr/configuration/ivans_checkstyle_config.xml
                     </configLocation>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     <excludes>module-info.java</excludes>
@@ -232,4 +232,21 @@
         </plugins>
 
     </build>
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <activatedProperties>dev</activatedProperties>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <activatedProperties>prod</activatedProperties>
+            </properties>
+        </profile>
+    </profiles>
 </project>

@@ -4,6 +4,7 @@ on:
     tags:
       - "v*"
 jobs:
+
   release:
     name: "Release"
     runs-on: "ubuntu-latest"
