@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ExecutionTimeTracker {
 
-    @Around("@annotation(com.softech.com.trackerbackend.configuration.LogExecutionTime)")
+    @Around("@annotation(com.softech.ehr.configuration.LogExecutionTime)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint)
         throws Throwable {
         final StopWatch stopWatch = new StopWatch();

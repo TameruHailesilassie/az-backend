@@ -30,7 +30,7 @@ public class JwtTokenProvider {
     private String secretKey;
 
     @Value("${security.jwt.token.expire-length}")
-    private long validityInMilliseconds;
+    private String validityInMilliseconds;
     private UserDetailsService userDetailsService;
 
     @PostConstruct
@@ -47,7 +47,8 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("auth", userRoles);
         Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInMilliseconds);
+        Date validity =
+            new Date(now.getTime() + Long.parseLong(validityInMilliseconds));
 
         return Jwts.builder()//
             .setClaims(claims)//

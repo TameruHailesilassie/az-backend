@@ -45,14 +45,14 @@ public class UserController {
     }
 
     @GetMapping("/test")
-    @ApiOperation(value = "test case", response = Collection.class)
+    @ApiOperation(value = "test case", response = String.class)
     public String test() {
         return "hi";
     }
 
 
     @PostMapping("/login")
-    @ApiOperation(value = "user Login end Point to get Access token", response = String.class)
+    @ApiOperation(value = "user Login end Point to get Access token", response = LoginResponseDTO.class)
     public LoginResponseDTO login(
         @Valid @RequestBody @ApiParam(value = "user email and Password")
             LoginDTO login) {

@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 
 public class UserPrincipal implements UserDetails {
 
-    private String phone;
+    private String email;
     private String password;
     private boolean enabled;
     private Collection<? extends GrantedAuthority> authorities;
@@ -28,7 +28,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return phone;
+        return email;
     }
 
     @Override

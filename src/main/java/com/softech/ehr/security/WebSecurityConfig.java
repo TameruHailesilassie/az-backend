@@ -1,6 +1,7 @@
 package com.softech.ehr.security;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +22,10 @@ import lombok.RequiredArgsConstructor;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -36,12 +41,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .anyRequest().authenticated();
 
         // If a user try to access a resource without having enough permissions
-      //  http.exceptionHandling().accessDeniedPage("/api/users/login");
+        //  http.exceptionHandling().accessDeniedPage("/api/users/login");
+        http.exceptionHandling()
+            .authenticationEntryPoint(jwtAuthenticationEntryPoint);
 
         // Apply JWT
         http.apply(new JwtTokenFilterConfigurer());
         // Optional, if you want to test the API from a browser
         //http.httpBasic();
+
     }
 
     @Bean
@@ -52,13 +60,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         // Allow swagger to be accessed without authentication
-        web.ignoring().antMatchers("/v2/api-docs")//
+        web.ignoring()
+            .antMatchers("/v2/api-docs")//
             .antMatchers("/swagger-resources/**")//
             .antMatchers("/swagger-ui.html")//
             .antMatchers("/configuration/**")//
             .antMatchers("/webjars/**")//
             .antMatchers("/public")
-            .antMatchers("/api/user/**");
+            .antMatchers("/api/users/test")
+
+        ;
     }
 
     @Bean

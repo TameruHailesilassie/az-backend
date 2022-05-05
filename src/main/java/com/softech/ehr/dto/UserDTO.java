@@ -7,8 +7,8 @@ import javax.persistence.FetchType;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
-import com.softech.ehr.user.EmploymentType;
-import com.softech.ehr.user.Role;
+import com.softech.ehr.enums.EmploymentType;
+import com.softech.ehr.enums.Role;
 
 @Data
 public class UserDTO {

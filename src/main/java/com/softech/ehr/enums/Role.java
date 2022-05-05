@@ -1,4 +1,4 @@
-package com.softech.ehr.user;
+package com.softech.ehr.enums;
 
 import org.springframework.security.core.GrantedAuthority;
 

@@ -17,10 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @AllArgsConstructor
 public class AuthService {
-
     private AuthenticationManager authenticationManager;
     private JwtTokenProvider jwtTokenProvider;
-
 
     public LoginResponseDTO authenticate(LoginDTO login) {
         Authentication authentication = authenticationManager
@@ -40,7 +38,6 @@ public class AuthService {
             token,
             user.roles()
         );
-
     }
 
 
