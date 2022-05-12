@@ -1,16 +1,20 @@
 package com.softech.ehr.dto.response;
 
 import com.softech.ehr.domain.entity.Role;
+import com.softech.ehr.domain.entity.Specialization;
 import com.softech.ehr.enums.Employment;
 
-import java.util.List;
+import java.util.Set;
 import javax.persistence.ElementCollection;
 import javax.persistence.FetchType;
 import javax.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-public class UserResponse {
+@AllArgsConstructor
+public class BasicUserDTO {
+
     private Long id;
     private String firstName;
     private String middleName;
@@ -19,7 +23,9 @@ public class UserResponse {
     private boolean enabled;
     private Employment employment;
     private String email;
+    private Specialization specialization;
     @NotEmpty
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<Role> roles;
+    private Set<Role> roles;
+
 }

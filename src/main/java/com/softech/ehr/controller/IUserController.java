@@ -1,6 +1,7 @@
 package com.softech.ehr.controller;
 
 import com.softech.ehr.domain.entity.User;
+import com.softech.ehr.dto.response.BasicUserDTO;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,7 @@ import java.util.List;
 public interface IUserController {
 
     @GetMapping()
-    ResponseEntity<List<User>> getAllUsers();
+    ResponseEntity<List<BasicUserDTO>> getAllUsers();
 
     @GetMapping("/{username}")
     ResponseEntity<User> getUserByName(
