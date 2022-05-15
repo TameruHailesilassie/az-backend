@@ -9,11 +9,24 @@ import org.springframework.web.context.request.WebRequest;
 import java.util.Date;
 
 @ControllerAdvice
-public class NoUserFoundAdvice {
+public class GlobalExceptionAdvice {
 
     @ExceptionHandler(NoUserFoundException.class)
     public ResponseEntity<ApiErrorMessage> resourceNotFoundException(
         NoUserFoundException ex, WebRequest request) {
+        ApiErrorMessage message = ApiErrorMessage.builder()
+            .statusCode(HttpStatus.NOT_FOUND.value())
+            .timestamp(new Date())
+            .message(ex.getMessage())
+            .description(request.getDescription(false))
+            .build();
+        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+    }
+
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ApiErrorMessage> entityNotFoundException(
+        EntityNotFoundException ex, WebRequest request) {
         ApiErrorMessage message = ApiErrorMessage.builder()
             .statusCode(HttpStatus.NOT_FOUND.value())
             .timestamp(new Date())

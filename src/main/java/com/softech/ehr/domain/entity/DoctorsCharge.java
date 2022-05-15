@@ -1,13 +1,14 @@
 package com.softech.ehr.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.softech.ehr.domain.base.BaseEntity;
 
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-import java.math.BigDecimal;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,11 +24,16 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(fluent = true)
 @EnableJpaAuditing
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DoctorsCharge extends BaseEntity {
 
-    private BigDecimal visitFee;
-    private BigDecimal consultationFee;
+    @JsonProperty
+    private String name;
+    @JsonProperty
+    private String value;
 
-    @OneToOne(mappedBy = "doctorsCharge")
+    @ManyToOne
+    @JoinColumn(columnDefinition = "long", name = "user_id")
     private User user;
+
 }

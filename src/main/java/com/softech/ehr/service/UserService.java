@@ -1,15 +1,12 @@
 package com.softech.ehr.service;
 
-
-import com.softech.ehr.domain.entity.User;
 import com.softech.ehr.dto.response.BasicUserDTO;
-
-import java.util.List;
-import java.util.Optional;
+import com.softech.ehr.dto.response.UsersResponse;
 
 public interface UserService {
 
-    List<BasicUserDTO> getAllUsers();
+    UsersResponse getAllUsers();
 
-    Optional<User> getUserByEmail(String email);
+    BasicUserDTO getUserByEmail(String email);
+
 }

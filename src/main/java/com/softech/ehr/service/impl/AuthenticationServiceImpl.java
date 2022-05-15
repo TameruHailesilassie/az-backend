@@ -1,13 +1,25 @@
 package com.softech.ehr.service.impl;
 
+import com.softech.ehr.domain.entity.DoctorsCharge;
+import com.softech.ehr.domain.entity.Role;
+import com.softech.ehr.domain.entity.Salary;
 import com.softech.ehr.domain.entity.User;
+import com.softech.ehr.dto.EhrModelMapper;
 import com.softech.ehr.dto.request.AuthenticationRequest;
+import com.softech.ehr.dto.request.UserRegistrationDTO;
 import com.softech.ehr.dto.response.AuthenticationResponse;
+import com.softech.ehr.dto.response.BasicUserDTO;
+import com.softech.ehr.exception.EntityNotFoundException;
 import com.softech.ehr.model.security.SecurityUser;
+import com.softech.ehr.repository.DoctorsChargeRepository;
+import com.softech.ehr.repository.RoleRepository;
+import com.softech.ehr.repository.SalaryRepository;
+import com.softech.ehr.repository.SpecializationRepository;
 import com.softech.ehr.repository.UserRepository;
 import com.softech.ehr.security.TokenUtils;
 import com.softech.ehr.service.AuthenticationService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,20 +27,55 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 
 @Service
-@RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
     private final TokenUtils tokenUtils;
     private final UserDetailsService userDetailsService;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final SalaryRepository salaryRepository;
+    private final RoleRepository roleRepository;
+    private final SpecializationRepository specializationRepository;
+    private final DoctorsChargeRepository doctorsChargeRepository;
+    private final EhrModelMapper modelMapper;
+
+
+    @Autowired
+    public AuthenticationServiceImpl(
+        AuthenticationManager authenticationManager,
+        TokenUtils tokenUtils,
+        UserDetailsService userDetailsService,
+        UserRepository userRepository,
+        PasswordEncoder passwordEncoder,
+        SalaryRepository salaryRepository,
+        RoleRepository roleRepository,
+        SpecializationRepository specializationRepository,
+
+        DoctorsChargeRepository doctorsChargeRepository,
+        EhrModelMapper modelMapper) {
+        this.authenticationManager = authenticationManager;
+        this.tokenUtils = tokenUtils;
+        this.userDetailsService = userDetailsService;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.salaryRepository = salaryRepository;
+        this.roleRepository = roleRepository;
+        this.specializationRepository = specializationRepository;
+        this.doctorsChargeRepository = doctorsChargeRepository;
+        this.modelMapper = modelMapper;
+    }
 
     @Override
     public AuthenticationResponse authenticate(
@@ -70,16 +117,70 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public User registerUser(AuthenticationRequest authenticationRequest) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword =
-            passwordEncoder.encode(authenticationRequest.getPassword());
-        //TODO add roles
+    @Transactional
+    public BasicUserDTO registerUser(
+        UserRegistrationDTO userRegistrationRequest) {
+        //Default user password
+        String hashedPassword = passwordEncoder.encode("azEhr");
+        //Salary
+        Salary salary = salaryRepository
+            .save(Salary.builder()
+                .amount(userRegistrationRequest.getSalaryAmount())
+                .type(userRegistrationRequest.getSalaryType())
+                .build());
+
+        Set<Role> userRoles = new HashSet<>();
+        userRegistrationRequest.getRoles().forEach(role -> {
+            userRoles.add(roleRepository.findByName(role)
+                .orElseThrow(
+                    () -> new EntityNotFoundException("Role:" + role)));
+        });
+
+        //User
         User newUser = User.builder()
-            //   .password(hashedPassword)
-            // .email(authenticationRequest.getEmail())
+            .firstName(userRegistrationRequest.getFirstName())
+            .middleName(userRegistrationRequest.getMiddleName())
+            .lastName(userRegistrationRequest.getLastName())
+            .sex(userRegistrationRequest.getSex())
+            .roles(userRoles)
+            .phoneNumber(userRegistrationRequest.getPhoneNumber())
+            .employment(userRegistrationRequest.getEmployment())
+            .enabled(true)
+            .dateStarted(userRegistrationRequest.getDateStarted())
+            .contractDate(userRegistrationRequest.getContractDate())
+            .createdDate(LocalDateTime.now())
+            .title(userRegistrationRequest.getTitle())
+            .password(hashedPassword)
+            .email(userRegistrationRequest.getEmail())
+            .phoneNumber(userRegistrationRequest.getPhoneNumber())
+            .salary(salary)
             .build();
-        return userRepository.save(newUser);
+        User savedUser = userRepository.save(newUser);
+
+        //Specialization
+        if (userRegistrationRequest.getSpecialization() != null) {
+            newUser.specialization(
+                specializationRepository.findById(
+                        userRegistrationRequest.getSpecialization())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                        "Specialization  not found by ID:" +
+                            userRegistrationRequest.getSpecialization()))
+            );
+        }
+
+        //Doctors Charge
+        if (userRegistrationRequest.getDoctorsCharge() != null) {
+
+            List<DoctorsCharge> doctorsCharges = userRegistrationRequest
+                .getDoctorsCharge()
+                .stream()
+                .map(doctorsCharge -> doctorsCharge.user(savedUser))
+                .collect(Collectors.toList());
+
+            doctorsChargeRepository.saveAll(doctorsCharges);
+        }
+
+        return modelMapper.convertToUserDto(newUser);
     }
 
     private User fetchUserByUserName(String userName) {

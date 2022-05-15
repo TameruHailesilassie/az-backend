@@ -30,6 +30,5 @@ import lombok.experimental.Accessors;
 public class Specialization extends BaseEntity {
     @OneToMany(mappedBy = "specialization", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     List<User> users;
-    @NotNull
     private String name;
 }

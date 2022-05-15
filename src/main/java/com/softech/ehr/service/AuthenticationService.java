@@ -2,7 +2,9 @@ package com.softech.ehr.service;
 
 import com.softech.ehr.domain.entity.User;
 import com.softech.ehr.dto.request.AuthenticationRequest;
+import com.softech.ehr.dto.request.UserRegistrationDTO;
 import com.softech.ehr.dto.response.AuthenticationResponse;
+import com.softech.ehr.dto.response.BasicUserDTO;
 
 public interface AuthenticationService {
     AuthenticationResponse authenticate(
@@ -10,5 +12,5 @@ public interface AuthenticationService {
 
     AuthenticationResponse refreshToken(String token);
 
-    User registerUser(AuthenticationRequest authenticationRequest);
+    BasicUserDTO registerUser(UserRegistrationDTO userRegistrationRequest);
 }

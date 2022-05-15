@@ -1,16 +1,15 @@
 package com.softech.ehr.service.impl;
 
-import com.softech.ehr.domain.entity.User;
 import com.softech.ehr.dto.EhrModelMapper;
 import com.softech.ehr.dto.response.BasicUserDTO;
+import com.softech.ehr.dto.response.UsersResponse;
+import com.softech.ehr.exception.NoUserFoundException;
 import com.softech.ehr.repository.UserRepository;
 import com.softech.ehr.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,16 +27,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<BasicUserDTO> getAllUsers() {
-        return userRepository.findAll()
-            .stream()
-            .map(modelMapper::convertToUserDto)
-            .collect(
-                Collectors.toList());
+    public UsersResponse getAllUsers() {
+        return UsersResponse.builder()
+            .users(
+                userRepository.findAll()
+                    .stream()
+                    .map(modelMapper::convertToUserDto)
+                    .collect(
+                        Collectors.toList()))
+            .meta("")
+            .build();
     }
 
     @Override
-    public Optional<User> getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public BasicUserDTO getUserByEmail(String email) {
+        return modelMapper
+            .convertToUserDto(userRepository.findByEmail(email).orElseThrow(
+                () -> new NoUserFoundException(
+                    "User not fund wit email=" + email)));
     }
 }

@@ -1,5 +1,7 @@
 package com.softech.ehr.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.softech.ehr.domain.base.BaseEntity;
 import com.softech.ehr.enums.SalaryType;
 
@@ -9,7 +11,6 @@ import java.math.BigDecimal;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,16 +27,16 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(fluent = true)
 @EnableJpaAuditing
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Salary extends BaseEntity {
 
-    @NotNull(message = "please enter salary amount")
+    @JsonProperty
     private BigDecimal amount;
-    @NotNull(message = "Please choose Salary Type")
+    @JsonProperty
     private SalaryType type;
-
+    @JsonProperty
     private String remark;
     @OneToOne(mappedBy = "salary")
     private User user;
-
 
 }
