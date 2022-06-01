@@ -20,21 +20,18 @@ import javax.persistence.EntityNotFoundException;
 
 @Component
 public class DataLoader implements ApplicationRunner {
-
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RoleContainer roleContainer;
-
     @Autowired
     public DataLoader(RoleRepository roleRepository,
                       UserRepository userRepository,
-                      PasswordEncoder passwordEncoder,
-                      RoleContainer roleContainer) {
+                      PasswordEncoder passwordEncoder
+                     ) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.roleContainer = roleContainer;
+
     }
 
     @Override

@@ -4,14 +4,12 @@ import com.softech.ehr.domain.base.BaseEntity;
 
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,7 +26,12 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 @EnableJpaAuditing
 public class Specialization extends BaseEntity {
-    @OneToMany(mappedBy = "specialization", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    List<User> users;
+    @OneToMany(mappedBy = "specialization", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    List<User> users= new ArrayList<>();
     private String name;
+
+    public void addUser(User user) {
+        this.users.add(user);
+        user.specialization(this);
+    }
 }

@@ -7,6 +7,7 @@ import com.softech.ehr.domain.base.BaseEntity;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
@@ -32,7 +33,7 @@ public class DoctorsCharge extends BaseEntity {
     @JsonProperty
     private String value;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(columnDefinition = "long", name = "user_id")
     private User user;
 

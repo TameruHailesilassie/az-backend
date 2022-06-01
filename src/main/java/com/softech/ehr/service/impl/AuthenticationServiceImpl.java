@@ -1,6 +1,5 @@
 package com.softech.ehr.service.impl;
 
-import com.softech.ehr.domain.entity.DoctorsCharge;
 import com.softech.ehr.domain.entity.Role;
 import com.softech.ehr.domain.entity.Salary;
 import com.softech.ehr.domain.entity.User;
@@ -11,9 +10,7 @@ import com.softech.ehr.dto.response.AuthenticationResponse;
 import com.softech.ehr.dto.response.BasicUserDTO;
 import com.softech.ehr.exception.EntityNotFoundException;
 import com.softech.ehr.model.security.SecurityUser;
-import com.softech.ehr.repository.DoctorsChargeRepository;
 import com.softech.ehr.repository.RoleRepository;
-import com.softech.ehr.repository.SalaryRepository;
 import com.softech.ehr.repository.SpecializationRepository;
 import com.softech.ehr.repository.UserRepository;
 import com.softech.ehr.security.TokenUtils;
@@ -31,10 +28,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 @Service
@@ -45,10 +41,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserDetailsService userDetailsService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final SalaryRepository salaryRepository;
     private final RoleRepository roleRepository;
     private final SpecializationRepository specializationRepository;
-    private final DoctorsChargeRepository doctorsChargeRepository;
     private final EhrModelMapper modelMapper;
 
 
@@ -59,21 +53,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         UserDetailsService userDetailsService,
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
-        SalaryRepository salaryRepository,
         RoleRepository roleRepository,
         SpecializationRepository specializationRepository,
-
-        DoctorsChargeRepository doctorsChargeRepository,
         EhrModelMapper modelMapper) {
         this.authenticationManager = authenticationManager;
         this.tokenUtils = tokenUtils;
         this.userDetailsService = userDetailsService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.salaryRepository = salaryRepository;
         this.roleRepository = roleRepository;
         this.specializationRepository = specializationRepository;
-        this.doctorsChargeRepository = doctorsChargeRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -120,15 +109,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Transactional
     public BasicUserDTO registerUser(
         UserRegistrationDTO userRegistrationRequest) {
-        //Default user password
-        String hashedPassword = passwordEncoder.encode("azEhr");
-        //Salary
-        Salary salary = salaryRepository
-            .save(Salary.builder()
-                .amount(userRegistrationRequest.getSalaryAmount())
-                .type(userRegistrationRequest.getSalaryType())
-                .build());
 
+        String hashedPassword = passwordEncoder.encode("azEhr");
         Set<Role> userRoles = new HashSet<>();
         userRegistrationRequest.getRoles().forEach(role -> {
             userRoles.add(roleRepository.findByName(role)
@@ -143,6 +125,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             .lastName(userRegistrationRequest.getLastName())
             .sex(userRegistrationRequest.getSex())
             .roles(userRoles)
+            .doctorsFee(new ArrayList<>())
             .phoneNumber(userRegistrationRequest.getPhoneNumber())
             .employment(userRegistrationRequest.getEmployment())
             .enabled(true)
@@ -153,9 +136,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             .password(hashedPassword)
             .email(userRegistrationRequest.getEmail())
             .phoneNumber(userRegistrationRequest.getPhoneNumber())
-            .salary(salary)
             .build();
-        User savedUser = userRepository.save(newUser);
 
         //Specialization
         if (userRegistrationRequest.getSpecialization() != null) {
@@ -170,17 +151,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         //Doctors Charge
         if (userRegistrationRequest.getDoctorsCharge() != null) {
-
-            List<DoctorsCharge> doctorsCharges = userRegistrationRequest
-                .getDoctorsCharge()
-                .stream()
-                .map(doctorsCharge -> doctorsCharge.user(savedUser))
-                .collect(Collectors.toList());
-
-            doctorsChargeRepository.saveAll(doctorsCharges);
+            userRegistrationRequest
+                .getDoctorsCharge().forEach(newUser::addDoctorsCharge);
         }
 
-        return modelMapper.convertToUserDto(newUser);
+        //Salary
+        Salary salary = Salary.builder()
+            .amount(userRegistrationRequest.getSalaryAmount())
+            .user(newUser)
+            .type(userRegistrationRequest.getSalaryType())
+            .build();
+
+        return modelMapper
+            .convertToUserDto
+                (userRepository.save(newUser));
     }
 
     private User fetchUserByUserName(String userName) {

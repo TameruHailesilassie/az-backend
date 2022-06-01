@@ -3,7 +3,7 @@ package com.softech.ehr.domain.base;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-
+import org.hibernate.annotations.GenericGenerator;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -11,16 +11,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import lombok.Getter;
-
 @Getter
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
 
-    //private static final long serialVersionUID = 4546097167586314016L;
-
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Override

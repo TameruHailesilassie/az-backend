@@ -1,18 +1,18 @@
 package com.softech.ehr.controller;
 
-import com.softech.ehr.domain.entity.User;
 import com.softech.ehr.dto.response.BasicUserDTO;
-import com.softech.ehr.dto.response.UsersResponse;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 public interface IUserController {
 
     @GetMapping()
-    ResponseEntity<UsersResponse> getAllUsers();
-
+    Page<BasicUserDTO> getAllUsers(@RequestParam int page,
+                                   @RequestParam int size);
 
     @GetMapping("/{username}")
     ResponseEntity<BasicUserDTO> getUserByEmail(

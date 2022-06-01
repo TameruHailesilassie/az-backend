@@ -14,6 +14,6 @@ import lombok.Setter;
 @Builder
 public class UsersResponse {
     private List<BasicUserDTO> users;
-    private String meta;
+    private MetaData meta;
 
 }

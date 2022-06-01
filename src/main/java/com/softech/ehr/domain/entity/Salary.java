@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.math.BigDecimal;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -27,6 +29,7 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(fluent = true)
 @EnableJpaAuditing
+//do not serialize null parameters
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Salary extends BaseEntity {
 
@@ -36,7 +39,8 @@ public class Salary extends BaseEntity {
     private SalaryType type;
     @JsonProperty
     private String remark;
-    @OneToOne(mappedBy = "salary")
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
     private User user;
 
 }
