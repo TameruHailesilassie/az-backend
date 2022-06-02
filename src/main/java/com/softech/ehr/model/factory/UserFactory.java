@@ -18,7 +18,7 @@ public class UserFactory {
             user.getId(),
             user.phoneNumber(),
             user.password(),
-            user.email(),
+            user.address().email(),
             null,
             createAuthoritiesToUser(user.roles())
         );

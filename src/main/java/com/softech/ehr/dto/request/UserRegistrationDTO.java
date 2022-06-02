@@ -2,6 +2,7 @@ package com.softech.ehr.dto.request;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.softech.ehr.domain.entity.Address;
 import com.softech.ehr.domain.entity.DoctorsCharge;
 import com.softech.ehr.enums.Employment;
 import com.softech.ehr.enums.SalaryType;
@@ -26,22 +27,19 @@ public class UserRegistrationDTO {
     private String lastName;
     private Sex sex;
     private String title;
-
+    private String phoneNumber;
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
-    // @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "d-MMM-yyyy")
     private LocalDate dateStarted;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
-    //@JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "d-MMM-yyyy")
     private LocalDate contractDate;
     private Employment employment;
-    private String email;
-    private String phoneNumber;
     private Set<String> roles = new HashSet<>();
     private BigDecimal salaryAmount;
     private SalaryType salaryType;
     private Long specialization;
     private List<DoctorsCharge> doctorsCharge;
+    private Address address;
 }

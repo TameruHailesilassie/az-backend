@@ -1,6 +1,7 @@
 package com.softech.ehr.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.softech.ehr.domain.entity.Address;
 import com.softech.ehr.domain.entity.DoctorsCharge;
 import com.softech.ehr.domain.entity.Role;
 import com.softech.ehr.domain.entity.Salary;
@@ -26,16 +27,18 @@ public class BasicUserDTO {
     private String firstName;
     private String middleName;
     private String lastName;
-    private String phoneNUmber;
     private boolean enabled;
     private Salary salary;
     private Sex sex;
     private Employment employment;
-    private String email;
     private List<DoctorsCharge> doctorsChargeList;
     private Specialization specialization;
+    private Address address;
+    private String phoneNumber;
     @NotEmpty
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
+    private String dateStarted;
+    private String contractDate;
 
 }

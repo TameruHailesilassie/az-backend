@@ -3,7 +3,7 @@ package com.softech.ehr.service.impl;
 import com.softech.ehr.domain.entity.Role;
 import com.softech.ehr.domain.entity.Salary;
 import com.softech.ehr.domain.entity.User;
-import com.softech.ehr.dto.EhrModelMapper;
+import com.softech.ehr.dto.AzModelMapper;
 import com.softech.ehr.dto.request.AuthenticationRequest;
 import com.softech.ehr.dto.request.UserRegistrationDTO;
 import com.softech.ehr.dto.response.AuthenticationResponse;
@@ -43,7 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final SpecializationRepository specializationRepository;
-    private final EhrModelMapper modelMapper;
+    private final AzModelMapper modelMapper;
 
 
     @Autowired
@@ -55,7 +55,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         PasswordEncoder passwordEncoder,
         RoleRepository roleRepository,
         SpecializationRepository specializationRepository,
-        EhrModelMapper modelMapper) {
+        AzModelMapper modelMapper) {
         this.authenticationManager = authenticationManager;
         this.tokenUtils = tokenUtils;
         this.userDetailsService = userDetailsService;
@@ -125,8 +125,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             .lastName(userRegistrationRequest.getLastName())
             .sex(userRegistrationRequest.getSex())
             .roles(userRoles)
-            .doctorsFee(new ArrayList<>())
             .phoneNumber(userRegistrationRequest.getPhoneNumber())
+            .doctorsFee(new ArrayList<>())
             .employment(userRegistrationRequest.getEmployment())
             .enabled(true)
             .dateStarted(userRegistrationRequest.getDateStarted())
@@ -134,8 +134,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             .createdDate(LocalDateTime.now())
             .title(userRegistrationRequest.getTitle())
             .password(hashedPassword)
-            .email(userRegistrationRequest.getEmail())
-            .phoneNumber(userRegistrationRequest.getPhoneNumber())
             .build();
 
         //Specialization
@@ -158,9 +156,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         //Salary
         Salary salary = Salary.builder()
             .amount(userRegistrationRequest.getSalaryAmount())
-            .user(newUser)
             .type(userRegistrationRequest.getSalaryType())
             .build();
+        newUser.salary(salary);
+        //Address
+        newUser.address(userRegistrationRequest.getAddress());
 
         return modelMapper
             .convertToUserDto

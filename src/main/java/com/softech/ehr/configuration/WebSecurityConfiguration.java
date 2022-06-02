@@ -32,7 +32,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final SecurityService securityService;
     private final TokenUtils tokenUtils;
 
-    @Autowired
     public WebSecurityConfiguration(
         EntryPointUnauthorizedHandler unauthorizedHandler,
         UserDetailsService userDetailsService, SecurityService securityService,

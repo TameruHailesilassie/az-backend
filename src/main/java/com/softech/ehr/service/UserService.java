@@ -8,6 +8,6 @@ public interface UserService {
 
     Page<BasicUserDTO> getAllUsers(int page, int size);
 
-    BasicUserDTO getUserByEmail(String email);
+    BasicUserDTO getUserByPhoneNumber(String phoneNumber);
 
 }

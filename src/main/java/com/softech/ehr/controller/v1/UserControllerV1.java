@@ -34,10 +34,10 @@ public class UserControllerV1 extends BaseController implements
         return userService.getAllUsers(page, size);
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/phoneNumber}")
     public ResponseEntity<BasicUserDTO> getUserByEmail(
-        @PathVariable("email") String email) {
-        BasicUserDTO aUser = userService.getUserByEmail(email);
+        @PathVariable("phoneNumber") String phone) {
+        BasicUserDTO aUser = userService.getUserByPhoneNumber(phone);
         return ResponseEntity.ok(aUser);
     }
 

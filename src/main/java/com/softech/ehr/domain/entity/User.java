@@ -23,7 +23,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.Email;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -41,7 +41,6 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(fluent = true)
-
 
 public class User extends BaseEntity {
 
@@ -66,11 +65,7 @@ public class User extends BaseEntity {
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
     private Employment employment;
-    @NotBlank(message = "phone number can not be blank")
-    private String phoneNumber;
-    @Email(message = "Please use a valid email")
-    @NotBlank(message = "email can not be empty")
-    private String email;
+
     @NotEmpty
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
@@ -86,6 +81,15 @@ public class User extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(columnDefinition = "long", name = "specialization_id")
     private Specialization specialization;
+    @NotBlank(message = "phone number can not be blank")
+    private String phoneNumber;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private Salary salary;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private Address address;
 
     public void addDoctorsCharge(DoctorsCharge doctorsCharge) {
         doctorsFee.add(doctorsCharge);
@@ -97,6 +101,19 @@ public class User extends BaseEntity {
         doctorsCharge.user(null);
     }
 
+    public void addAddress(Address address) {
+        if (address != null) {
+            this.address = address;
+            address.user(this);
+        }
 
+    }
+    public void addSalary(Salary salary) {
+        if (salary != null) {
+            this.salary = salary;
+            salary.user(this);
+        }
+
+    }
 
 }
