@@ -3,7 +3,6 @@ package com.softech.ehr.repository;
 import com.softech.ehr.domain.entity.User;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
