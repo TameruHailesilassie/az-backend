@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 
 
 @Component
@@ -48,6 +49,7 @@ public class DataLoader implements ApplicationRunner {
     }
 
     @Override
+    @Transactional
     public void run(ApplicationArguments args) {
 
         if (!roleRepository.existsByName(RoleContainer.ADMIN)) {
@@ -92,10 +94,8 @@ public class DataLoader implements ApplicationRunner {
                 .build());
             userRepository.save(superAdmin);
 
-
         }
-
-
+/*
         //Sample Fake user Data
         List<User> fakeUsers = IntStream.rangeClosed(1, 10)
             .mapToObj(i -> {
@@ -141,7 +141,7 @@ public class DataLoader implements ApplicationRunner {
                         .build());
                 return fakeUser;
             }).collect(Collectors.toList());
-
-        userRepository.saveAll(fakeUsers);
+*/
+       // userRepository.saveAll(fakeUsers);
     }
 }

@@ -1,37 +1,32 @@
 package com.softech.ehr.dto;
 
+import com.softech.ehr.domain.entity.Address;
+import com.softech.ehr.domain.entity.DoctorsFee;
+import com.softech.ehr.domain.entity.Salary;
+import com.softech.ehr.domain.entity.Specialization;
 import com.softech.ehr.domain.entity.User;
-import com.softech.ehr.dto.response.BasicUserDTO;
-import com.softech.ehr.helpers.AzDateFormatter;
+import com.softech.ehr.dto.request.UserPostDto;
+import com.softech.ehr.dto.response.AddressDto;
+import com.softech.ehr.dto.response.DoctorsFeeDto;
+import com.softech.ehr.dto.response.SalaryDto;
+import com.softech.ehr.dto.response.SpecializationDto;
+import com.softech.ehr.dto.response.UserDto;
 
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
 
-import lombok.NoArgsConstructor;
+@Mapper(componentModel = "spring")
+public interface AzModelMapper {
 
-@Component
-@NoArgsConstructor
-public class AzModelMapper {
+    UserDto toUserDto(User user);
 
-    public BasicUserDTO convertToUserDto(User user) {
+    AddressDto toAddressDto(Address address);
 
-        return new BasicUserDTO(
-            user.getId(),
-            user.title(),
-            user.firstName(),
-            user.middleName(),
-            user.lastName(),
-            user.enabled(),
-            user.salary(),
-            user.sex(),
-            user.employment(),
-            user.doctorsFee(),
-            user.specialization(),
-            user.address(),
-            user.phoneNumber(),
-            user.roles(),
-            AzDateFormatter.formatLocalDate(user.dateStarted()),
-            AzDateFormatter.formatLocalDate(user.contractDate())
+    DoctorsFeeDto toDoctorsFeeDto(DoctorsFee doctorsFee);
 
-        );
-    }
+    SalaryDto toSalaryDto(Salary salary);
+
+    SpecializationDto toSpecializationDto(Specialization specialization);
+
+    User toUser(UserPostDto userPostDto);
+
 }

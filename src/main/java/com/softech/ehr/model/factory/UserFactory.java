@@ -16,11 +16,11 @@ public class UserFactory {
     public static SecurityUser create(User user) {
         return new SecurityUser(
             user.getId(),
-            user.phoneNumber(),
-            user.password(),
-            user.address().email(),
+            user.getPhoneNumber(),
+            user.getPassword(),
+            user.getAddress().email(),
             null,
-            createAuthoritiesToUser(user.roles())
+            createAuthoritiesToUser(user.getRoles())
         );
     }
 

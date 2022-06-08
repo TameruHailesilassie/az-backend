@@ -1,6 +1,5 @@
 package com.softech.ehr.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.softech.ehr.domain.base.BaseEntity;
 import com.softech.ehr.enums.SalaryType;
@@ -29,8 +28,7 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(fluent = true)
 @EnableJpaAuditing
-//do not serialize null parameters
-@JsonInclude(JsonInclude.Include.NON_NULL)
+
 public class Salary extends BaseEntity {
 
     @JsonProperty

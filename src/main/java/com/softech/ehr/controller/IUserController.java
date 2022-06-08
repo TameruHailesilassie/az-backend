@@ -1,6 +1,6 @@
 package com.softech.ehr.controller;
 
-import com.softech.ehr.dto.response.BasicUserDTO;
+import com.softech.ehr.dto.response.UserDto;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 public interface IUserController {
 
-    @GetMapping()
-    Page<BasicUserDTO> getAllUsers(@RequestParam int page,
-                                   @RequestParam int size);
+    @GetMapping("/list")
+    Page<UserDto> getAllUsers(@RequestParam int page,
+                              @RequestParam int size);
 
-    @GetMapping("/{username}")
-    ResponseEntity<BasicUserDTO> getUserByEmail(
-        @PathVariable("username") String username);
+    @GetMapping()
+    ResponseEntity<UserDto> getUserByPhone(
+        @PathVariable("phone") String phoneNUmber);
 
 
     @GetMapping("/test")

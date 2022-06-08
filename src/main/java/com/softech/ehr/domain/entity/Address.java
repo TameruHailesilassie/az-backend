@@ -1,11 +1,8 @@
 package com.softech.ehr.domain.entity;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.softech.ehr.domain.base.BaseEntity;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;

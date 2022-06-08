@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class AuthenticationResponse extends ModelBase {
+public class AuthDto extends ModelBase {
 
     private static final long serialVersionUID = 7431193836933783650L;
     Set<Role> roles;

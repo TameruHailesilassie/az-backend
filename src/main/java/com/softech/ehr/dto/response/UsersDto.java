@@ -12,8 +12,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UsersResponse {
-    private List<BasicUserDTO> users;
-    private MetaData meta;
-
+public class UsersDto {
+    private List<UserDto> users;
 }

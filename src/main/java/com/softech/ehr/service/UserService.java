@@ -1,13 +1,13 @@
 package com.softech.ehr.service;
 
-import com.softech.ehr.dto.response.BasicUserDTO;
+import com.softech.ehr.dto.response.UserDto;
 
 import org.springframework.data.domain.Page;
 
 public interface UserService {
 
-    Page<BasicUserDTO> getAllUsers(int page, int size);
+    Page<UserDto> getAllUsers(int page, int size);
 
-    BasicUserDTO getUserByPhoneNumber(String phoneNumber);
+    UserDto getUserByPhoneNumber(String phoneNumber);
 
 }

@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AuthenticationRequest extends ModelBase {
+public class AuthPostDto extends ModelBase {
     private static final long serialVersionUID = 7151443507829405471L;
     @NotNull(message = "Username must be provided")
     private String username;

@@ -2,12 +2,12 @@ package com.softech.ehr.repository;
 
 import java.util.Optional;
 
-import com.softech.ehr.domain.entity.DoctorsCharge;
+import com.softech.ehr.domain.entity.DoctorsFee;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface DoctorsChargeRepository extends JpaRepository<DoctorsCharge, Long> {
+public interface DoctorsChargeRepository extends JpaRepository<DoctorsFee, Long> {
 
-    Optional<DoctorsCharge> findById(Long aLong);
-    Optional<DoctorsCharge> findByName(String name);
+    Optional<DoctorsFee> findById(Long aLong);
+    Optional<DoctorsFee> findByName(String name);
 }

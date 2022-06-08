@@ -1,8 +1,12 @@
 package com.softech.ehr.domain.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.softech.ehr.domain.base.BaseEntity;
 import com.softech.ehr.enums.Employment;
 import com.softech.ehr.enums.Sex;
+import com.softech.ehr.helpers.LocalDateDeserializer;
+import com.softech.ehr.helpers.LocalDateSerializer;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -24,15 +28,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Entity
 @Setter
@@ -40,63 +40,66 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Accessors(fluent = true)
 
 public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user"
         , cascade = CascadeType.ALL
         , orphanRemoval = true)
-    List<DoctorsCharge> doctorsFee = new ArrayList<DoctorsCharge>();
-    @NotBlank(message = "first name can not be blank")
+    List<DoctorsFee> doctorsFee = new ArrayList<DoctorsFee>();
+
     private String firstName;
+
     private String title;
     @Lob
     private byte[] profileImage;
-    @NotBlank(message = "middle name can not be blank")
+
     private String middleName;
-    @NotBlank(message = "last  name can not be blank")
+
     private String lastName;
     private Sex sex;
     @CreatedDate
     private LocalDateTime createdDate;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dateStarted;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate contractDate;
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
     private Employment employment;
 
-    @NotEmpty
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(
         name = "users_roles",
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
-    @NotBlank(message = "password can not be blank")
+
     private String password;
-    @NotNull(message = "Enable should be set")
+
     private boolean enabled;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(columnDefinition = "long", name = "specialization_id")
     private Specialization specialization;
-    @NotBlank(message = "phone number can not be blank")
+
     private String phoneNumber;
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Salary salary;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
     private Address address;
 
-    public void addDoctorsCharge(DoctorsCharge doctorsCharge) {
-        doctorsFee.add(doctorsCharge);
+    public void addDoctorsCharge(DoctorsFee doctorsCharge) {
+        //doctorsFee.add(doctorsCharge);
         doctorsCharge.user(this);
     }
 
-    public void removeDoctorsCharge(DoctorsCharge doctorsCharge) {
+    public void removeDoctorsCharge(DoctorsFee doctorsCharge) {
         doctorsFee.remove(doctorsCharge);
         doctorsCharge.user(null);
     }

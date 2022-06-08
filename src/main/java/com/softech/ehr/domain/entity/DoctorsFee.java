@@ -1,6 +1,5 @@
 package com.softech.ehr.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.softech.ehr.domain.base.BaseEntity;
 
@@ -25,8 +24,8 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(fluent = true)
 @EnableJpaAuditing
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class DoctorsCharge extends BaseEntity {
+
+public class DoctorsFee extends BaseEntity {
 
     @JsonProperty
     private String name;

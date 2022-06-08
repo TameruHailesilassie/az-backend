@@ -3,23 +3,22 @@ package com.softech.ehr.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import io.swagger.v3.oas.annotations.Operation;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import com.softech.ehr.dto.request.AuthenticationRequest;
-import com.softech.ehr.dto.request.UserRegistrationDTO;
-import com.softech.ehr.dto.response.BasicUserDTO;
+import com.softech.ehr.domain.entity.User;
+import com.softech.ehr.dto.request.AuthPostDto;
+import com.softech.ehr.dto.request.UserPostDto;
 
 
 public interface IAuthenticationController {
 
 
     @PostMapping("/login")
-    ResponseEntity<?> authenticationRequest(@RequestBody @Valid AuthenticationRequest authenticationRequest);
+    ResponseEntity<?> authenticationRequest(@RequestBody @Valid AuthPostDto authenticationRequest);
     @GetMapping("/refresh")
     ResponseEntity<?> authenticationRequest(HttpServletRequest request);
 
     @PostMapping("/register")
-    ResponseEntity<?> registerUser(@RequestBody @Valid UserRegistrationDTO userRegistrationRequest);
+    ResponseEntity<?> registerUser(@RequestBody @Valid UserPostDto userPostDto);
 }

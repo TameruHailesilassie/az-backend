@@ -32,6 +32,6 @@ public class Specialization extends BaseEntity {
 
     public void addUser(User user) {
         this.users.add(user);
-        user.specialization(this);
+        user.setSpecialization(this);
     }
 }
