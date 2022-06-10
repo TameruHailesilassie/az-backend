@@ -1,7 +1,7 @@
 package com.softech.ehr.service.impl;
 
 import com.softech.ehr.domain.entity.User;
-import com.softech.ehr.dto.AzModelMapper;
+import com.softech.ehr.dto.AzUserMapper;
 import com.softech.ehr.dto.response.UserDto;
 import com.softech.ehr.exception.NoUserFoundException;
 import com.softech.ehr.repository.UserRepository;
@@ -21,7 +21,7 @@ import lombok.AllArgsConstructor;
 
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final AzModelMapper modelMapper;
+    private final AzUserMapper userMapper;
 
     @Override
     public Page<UserDto> getAllUsers(int page, int size) {
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
         return new PageImpl<>(
             result
                 .stream()
-                .map(modelMapper::toUserDto)
+                .map(userMapper::toUserDto)
                 .collect(Collectors.toList())
             , pr, result.getTotalElements());
     }
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserByPhoneNumber(String phoneNumber) {
 
-        return modelMapper.toUserDto(
+        return userMapper.toUserDto(
             userRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new NoUserFoundException(
                     phoneNumber)));

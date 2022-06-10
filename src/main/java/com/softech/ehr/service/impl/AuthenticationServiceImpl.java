@@ -1,7 +1,6 @@
 package com.softech.ehr.service.impl;
 
 import com.softech.ehr.domain.entity.User;
-import com.softech.ehr.dto.AzModelMapper;
 import com.softech.ehr.dto.request.AuthPostDto;
 import com.softech.ehr.dto.response.AuthDto;
 import com.softech.ehr.exception.UserAlreadyExistException;
@@ -10,8 +9,6 @@ import com.softech.ehr.repository.UserRepository;
 import com.softech.ehr.security.TokenUtils;
 import com.softech.ehr.service.AuthenticationService;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +20,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -37,7 +33,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserDetailsService userDetailsService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AzModelMapper modelMapper;
 
 
     @Override
@@ -87,16 +82,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new UserAlreadyExistException(
                 user.getPhoneNumber());
         }
-        String hashedPassword = passwordEncoder.encode("azEhr");
-        user.setPassword(hashedPassword);
-        user.setFirstName(StringUtils.capitalize(user.getFirstName()));
-        user.setEnabled(true);
-        user.setCreatedDate(LocalDateTime.now());
+        //default password
+        user.setPassword(passwordEncoder.encode("azEhr"));
         user.addAddress(user.getAddress());
-        user.getDoctorsFee().forEach(user::addDoctorsCharge);
+        user.addSalary(user.getSalary());
         return userRepository.save(user);
-
-
     }
 
     private User fetchUserByUserName(String userName) {

@@ -1,5 +1,6 @@
 package com.softech.ehr.controller.v1;
 
+import com.softech.ehr.dto.AzUserMapper;
 import com.softech.ehr.controller.BaseController;
 import com.softech.ehr.controller.IAuthenticationController;
 import com.softech.ehr.domain.entity.User;
@@ -30,9 +31,12 @@ public class AuthenticationControllerV1
 
 
     private final AuthenticationService authenticationService;
+    private final AzUserMapper userMapper;
     @Value("${ehr.token.header}")
     private String tokenHeader;
-    private AzModelMapper modelMapper;
+
+
+
 
     @PostMapping("/login")
     public ResponseEntity<AuthDto> authenticationRequest(
@@ -53,8 +57,8 @@ public class AuthenticationControllerV1
     public ResponseEntity<UserDto> registerUser(
         @RequestBody UserPostDto postDto) {
         User user = this.authenticationService
-            .registerUser(modelMapper.toUser(postDto));
-        return new ResponseEntity<>(modelMapper.toUserDto(user),
+            .registerUser(userMapper.toUser(postDto));
+        return new ResponseEntity<>(userMapper.toUserDto(user),
             HttpStatus.CREATED);
     }
 

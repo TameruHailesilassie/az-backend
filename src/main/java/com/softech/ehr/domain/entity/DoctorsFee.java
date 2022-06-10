@@ -22,7 +22,6 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Accessors(fluent = true)
 @EnableJpaAuditing
 
 public class DoctorsFee extends BaseEntity {

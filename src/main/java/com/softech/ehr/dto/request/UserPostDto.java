@@ -37,6 +37,6 @@ public class UserPostDto {
     private Set<Role> roles = new HashSet<>();
     private SalaryDto salary;
     private SpecializationDto specialization;
-    private List<DoctorsFeeDto> doctorsCharge;
+    private List<DoctorsFeeDto> doctorsFee;
     private AddressDto address;
 }

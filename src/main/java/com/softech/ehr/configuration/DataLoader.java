@@ -78,7 +78,7 @@ public class DataLoader implements ApplicationRunner {
                 roleRepository.findByName(RoleContainer.ADMIN).orElseThrow(
                     EntityNotFoundException::new));
 
-            User superAdmin = User.builder()
+          /*  User superAdmin = User.builder()
                 .firstName("Admin")
                 .lastName("Admin")
                 .phoneNumber("+251(924)-13-95-90")
@@ -89,10 +89,10 @@ public class DataLoader implements ApplicationRunner {
                 .roles(roles)
                 .build();
 
-            superAdmin.addAddress(Address.builder()
+          /*  superAdmin.addAddress(Address.builder()
                 .email("admin@azEhr.com")
                 .build());
-            userRepository.save(superAdmin);
+            userRepository.save(superAdmin);*/
 
         }
 /*

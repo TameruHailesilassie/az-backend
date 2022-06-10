@@ -25,11 +25,10 @@ public class UserControllerV1 extends BaseController implements
 
     @GetMapping("/list")
     @PreAuthorize("hasRole(@R.ADMIN)")
-
     public Page<UserDto> getAllUsers(
         @RequestParam int page, @RequestParam int size
     ) {
-        logger.debug("attempt to fetch all users");
+        logger.info("attempt to fetch all users");
         return userService.getAllUsers(page, size);
     }
 

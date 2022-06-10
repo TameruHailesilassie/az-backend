@@ -1,15 +1,22 @@
 package com.softech.ehr.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.softech.ehr.domain.entity.Role;
 import com.softech.ehr.enums.Employment;
 import com.softech.ehr.enums.Sex;
+import com.softech.ehr.helpers.LocalDateDeserializer;
+import com.softech.ehr.helpers.LocalDateSerializer;
 
+import java.time.LocalDate;
 import java.util.Set;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Builder
 public class UserDto {
 
     private Long id;
@@ -26,7 +33,11 @@ public class UserDto {
     private AddressDto address;
     private String phoneNumber;
     private Set<Role> roles;
-    private String dateStarted;
-    private String contractDate;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate dateStarted;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate contractDate;
 
 }

@@ -1,14 +1,9 @@
 package com.softech.ehr.service.impl;
 
 import com.github.javafaker.Faker;
-import com.softech.ehr.domain.entity.Address;
-import com.softech.ehr.domain.entity.Salary;
 import com.softech.ehr.domain.entity.User;
-import com.softech.ehr.dto.AzModelMapper;
+import com.softech.ehr.dto.AzUserMapper;
 import com.softech.ehr.dto.response.UserDto;
-import com.softech.ehr.enums.Employment;
-import com.softech.ehr.enums.SalaryType;
-import com.softech.ehr.enums.Sex;
 import com.softech.ehr.exception.NoUserFoundException;
 import com.softech.ehr.repository.UserRepository;
 
@@ -30,8 +25,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -105,7 +98,7 @@ class UserServiceImplTest {
     }
 
     private User createFakeUser() {
-        User fakeUser = User.builder()
+       /* User fakeUser = User.builder()
             .firstName(faker.name().firstName())
             .middleName(faker.name().lastName())
             .lastName(faker.name().firstName())
@@ -117,7 +110,7 @@ class UserServiceImplTest {
             .dateStarted(LocalDate.now())
             .build();
 
-        fakeUser.addAddress(
+        fakeUser.setAddress(
             Address.builder()
                 .email(faker.internet().emailAddress())
                 .city(faker.address().city())
@@ -131,15 +124,16 @@ class UserServiceImplTest {
                     faker.phoneNumber().subscriberNumber())
                 .build());
 
-        fakeUser.addSalary(
+        fakeUser.setSalary(
             Salary.builder()
                 .type(SalaryType.NET)
                 .amount(BigDecimal.valueOf(3800))
                 .build());
-        return fakeUser;
+        return fakeUser;*/
+        return new User();
     }
 
-    private AzModelMapper createModelMapper() {
+    private AzUserMapper createModelMapper() {
         return null;
     }
 

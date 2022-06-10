@@ -8,6 +8,7 @@ import com.softech.ehr.enums.Sex;
 import com.softech.ehr.helpers.LocalDateDeserializer;
 import com.softech.ehr.helpers.LocalDateSerializer;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -29,24 +30,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-
 public class User extends BaseEntity {
-
     @OneToMany(mappedBy = "user"
         , cascade = CascadeType.ALL
         , orphanRemoval = true)
-    List<DoctorsFee> doctorsFee = new ArrayList<DoctorsFee>();
+    List<DoctorsFee> doctorsFee;
 
     private String firstName;
 
@@ -79,8 +76,8 @@ public class User extends BaseEntity {
     private Set<Role> roles = new HashSet<>();
 
     private String password;
-
-    private boolean enabled;
+    // @Builder.Default
+    private boolean enabled = true;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(columnDefinition = "long", name = "specialization_id")
     private Specialization specialization;
@@ -94,29 +91,45 @@ public class User extends BaseEntity {
     @PrimaryKeyJoinColumn
     private Address address;
 
-    public void addDoctorsCharge(DoctorsFee doctorsCharge) {
-        //doctorsFee.add(doctorsCharge);
-        doctorsCharge.user(this);
+    public void addDoctorsFee(DoctorsFee doctorsFee) {
+
+        if (this.doctorsFee == null) {
+            this.doctorsFee = new ArrayList<>();
+        }
+        this.doctorsFee.add(doctorsFee);
+        doctorsFee.setUser(this);
+        System.out.printf("add doctors fee called with name %s", doctorsFee.getName());
     }
 
     public void removeDoctorsCharge(DoctorsFee doctorsCharge) {
         doctorsFee.remove(doctorsCharge);
-        doctorsCharge.user(null);
+        doctorsCharge.setUser(null);
     }
 
     public void addAddress(Address address) {
         if (address != null) {
+            address.setUser(this);
             this.address = address;
-            address.user(this);
         }
 
     }
+
     public void addSalary(Salary salary) {
         if (salary != null) {
             this.salary = salary;
-            salary.user(this);
+            salary.setUser(this);
         }
-
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = StringUtils.capitalize(firstName);
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = StringUtils.capitalize(middleName);
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = StringUtils.capitalize(lastName);
+    }
 }
