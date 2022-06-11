@@ -17,10 +17,6 @@ public class EhrApiApplication {
         SpringApplication.run(EhrApiApplication.class, args);
     }
 
-    @Bean
-    public Faker faker() {
-        return new Faker();
 
-    }
 
 }
