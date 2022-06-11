@@ -5,6 +5,7 @@ import com.softech.ehr.domain.base.BaseEntity;
 
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import java.math.BigDecimal;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -29,10 +30,14 @@ public class DoctorsFee extends BaseEntity {
     @JsonProperty
     private String name;
     @JsonProperty
-    private String value;
+    private BigDecimal value;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(columnDefinition = "long", name = "user_id")
     private User user;
 
+    public DoctorsFee(String name, BigDecimal value) {
+        this.name = name;
+        this.value = value;
+    }
 }

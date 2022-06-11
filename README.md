@@ -1,3 +1,7 @@
 ### Spring Boot Based EHR Services
-+ GitHub action CI/CD  enabled repo 
++ CI/CD: GitHub Action  
 + git flow based Semver
++ Api documentation: Swagger
++ Test: Junit 5 and Mockito
++ Database: Mysql
++ ORM: Hibernate
