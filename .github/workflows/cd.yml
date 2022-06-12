@@ -21,7 +21,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: jarpack
-          path: target/ # if you maven build jar package to 'target' folder, specify value here.
+          path: target/Ehr-0.3.17.jar # if you maven build jar package to 'target' folder, specify value here.
 
   release:
     name: "Release"
@@ -53,7 +53,7 @@ jobs:
           environment_name: az-env
           version_label: ${{github.SHA}}
           region: us-east-1
-          deployment_package: target/
+          deployment_package: Ehr-0.3.17.jar
 
 #  publish-Docker:
 #    needs: release
