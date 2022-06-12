@@ -8,7 +8,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Build
-    needs: test
     steps:
       - name: Checkout
         uses: actions/checkout@v1
