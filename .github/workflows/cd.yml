@@ -53,7 +53,7 @@ jobs:
           environment_name: az-env
           version_label: ${{github.SHA}}
           region: us-east-1
-          deployment_package: target/
+          deployment_package: ./target
 
 
 
