@@ -16,21 +16,13 @@ jobs:
         with:
           java-version: 1.8
       - name: Build with Maven
-        run: mvn -B package --file pom.xml -Dmaven.test.skip=true -P prod
+        run: mvn package -D env=prod -Dmaven.test.skip=true
       - name: Upload jar for deployment
         uses: actions/upload-artifact@v1
         with:
           name: jarpack
-          path: target/Ehr-0.3.17.jar # if you maven build jar package to 'target' folder, specify value here.
+          path: target/Ehr-0.3.17.jar
 
-  release:
-    name: "Release"
-    runs-on: "ubuntu-latest"
-    steps:
-      - uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.PAT }}"
-          prerelease: false
 
   deploy:
     needs: build
@@ -47,7 +39,6 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          #aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
           use_existing_version_if_available: false
           application_name: ehr
           environment_name: ehr-env
@@ -55,6 +46,14 @@ jobs:
           region: us-east-1
           deployment_package: Ehr-0.3.17.jar
 
+  release:
+    name: "Release"
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.PAT }}"
+          prerelease: false
 #  publish-Docker:
 #    needs: release
 #    name: Publish To Docker

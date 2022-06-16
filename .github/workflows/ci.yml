@@ -46,12 +46,7 @@ jobs:
         with:
           java-version: 1.8
       - name: Build with Maven
-        run:  mvn -B package --file pom.xml -Dmaven.test.skip=true
-      - name: Upload jar for job 1
-        uses: actions/upload-artifact@v1
-        with:
-            name: jarpack
-            path: ./target # if you maven build jar package to 'target' folder, specify value here.
+        run: mvn package -D env=prod -Dmaven.test.skip=true
 
       - name: Generate codecov report
         run: mvn cobertura:cobertura
