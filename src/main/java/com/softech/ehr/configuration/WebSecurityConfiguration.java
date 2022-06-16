@@ -5,7 +5,6 @@ import com.softech.ehr.security.EntryPointUnauthorizedHandler;
 import com.softech.ehr.security.TokenUtils;
 import com.softech.ehr.service.SecurityService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -89,7 +88,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-          //  .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            //  .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .antMatchers(
                 "/auth/**",
                 "/h2-console/**",
@@ -119,6 +118,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/configuration/**",
             "/swagger-resources/**",
             "/v2/api-docs",
+            "/v1/auth/login",
             "/v3/api-docs",
             "/bus/v3/api-docs/**",
             "/webjars/**");

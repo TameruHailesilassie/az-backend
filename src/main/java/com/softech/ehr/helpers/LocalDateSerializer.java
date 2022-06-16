@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 public class LocalDateSerializer extends StdSerializer<LocalDate> {
 
     private final DateTimeFormatter formatter2 =
-        DateTimeFormatter.ofPattern("d-MMM-yyyy");
+        DateTimeFormatter.ofPattern("MMM-d-yyyy");
 
     public LocalDateSerializer() {
         this(null);

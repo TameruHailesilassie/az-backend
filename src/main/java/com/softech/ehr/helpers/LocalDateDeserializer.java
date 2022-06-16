@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 public class LocalDateDeserializer extends StdDeserializer<LocalDate> {
 
     private final
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MMM-yyyy");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM-d-yyyy");
 
     public LocalDateDeserializer() {
         this(null);
