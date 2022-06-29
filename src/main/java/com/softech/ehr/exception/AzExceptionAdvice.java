@@ -35,7 +35,7 @@ public class AzExceptionAdvice {
             .message(ex.getMessage())
             .description("Username or Password Error!")
             .build();
-        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
     }
 
 
