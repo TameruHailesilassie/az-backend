@@ -17,11 +17,11 @@ jobs:
           java-version: 1.8
       - name: Build with Maven
         run: mvn package -D env=prod -Dmaven.test.skip=true
-      - name: Upload jar for deployment
+      - name: Upload war for deployment
         uses: actions/upload-artifact@v1
         with:
-          name: jarpack
-          path: target/Ehr-0.3.17.jar
+          name: warPack
+          path: target/Ehr-0.3.17.war
 
 
   deploy:
@@ -29,10 +29,10 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Download JAR
+      - name: Download WAR
         uses: actions/download-artifact@v2
         with:
-          name: jarpack
+          name: warPack
       #Deploy the artifact (JAR) into AWS Beanstalk
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v13
@@ -44,7 +44,7 @@ jobs:
           environment_name: Backendaz-env
           version_label: ${{github.SHA}}
           region: us-east-1
-          deployment_package: Ehr-0.3.17.jar
+          deployment_package: Ehr-0.3.17.war
 
   release:
     needs: deploy
