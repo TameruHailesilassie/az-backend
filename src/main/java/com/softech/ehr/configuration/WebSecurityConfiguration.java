@@ -82,7 +82,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Collections.singletonList("*"));
+        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
         httpSecurity
             .csrf()
             .disable()
@@ -104,10 +105,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/bus/v3/api-docs/**",
                 "/swagger-ui.html",
                 "/swagger-ui/**").permitAll()
-            .anyRequest().authenticated()
+            .anyRequest()
+            .authenticated()
             .and()
             .cors()
             .configurationSource(request -> corsConfiguration);
+
         // Custom JWT based authentication
         httpSecurity
             .addFilterBefore(authenticationTokenFilterBean(),
