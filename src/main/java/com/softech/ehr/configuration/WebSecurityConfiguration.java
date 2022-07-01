@@ -101,7 +101,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/swagger-ui/**").permitAll()
             .anyRequest().authenticated()
             .and()
-            .cors();
+            .cors()
+            .disable();
         // Custom JWT based authentication
         httpSecurity
             .addFilterBefore(authenticationTokenFilterBean(),
