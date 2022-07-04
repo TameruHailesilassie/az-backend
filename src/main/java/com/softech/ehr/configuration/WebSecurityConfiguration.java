@@ -81,9 +81,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOrigin("*");
-        corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
         httpSecurity
             .csrf()
             .disable()
@@ -108,8 +105,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .anyRequest()
             .authenticated()
             .and()
-            .cors()
-            .configurationSource(request -> corsConfiguration);
+            .cors();
+
 
         // Custom JWT based authentication
         httpSecurity
