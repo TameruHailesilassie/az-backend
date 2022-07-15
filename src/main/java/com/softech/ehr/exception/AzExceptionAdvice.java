@@ -74,4 +74,16 @@ public class AzExceptionAdvice {
             .build();
         return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(TokenRefreshException.class)
+    public ResponseEntity<ApiErrorMessage> TokenRefreshException(
+        BadCredentialsException ex, WebRequest request) {
+        ApiErrorMessage message = ApiErrorMessage.builder()
+            .statusCode(HttpStatus.UNAUTHORIZED.value())
+            .timestamp(LocalDateTime.now())
+            .message(ex.getMessage())
+            .description("")
+            .build();
+        return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
+    }
 }

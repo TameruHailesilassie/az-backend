@@ -99,6 +99,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/v1/users/test",
                 "/actuator/**",
                 "/v1/auth/login",
+                "/v1/auth/refresh",
                 "/bus/v3/api-docs/**",
                 "/swagger-ui.html",
                 "/swagger-ui/**").permitAll()

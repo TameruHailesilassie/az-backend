@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,10 +22,10 @@ public class TokenUtils {
     private final String AUDIENCE_MOBILE = "mobile";
     private final String AUDIENCE_TABLET = "tablet";
 
-    @Value("${ehr.token.secret}")
+    @Value("${az.access.token.secret}")
     private String secret;
 
-    @Value("${ehr.token.expiration}")
+    @Value("${az.access.token.expiration}")
     private Long expiration;
 
     public String getUsernameFromToken(String token) {
@@ -38,22 +39,11 @@ public class TokenUtils {
         return username;
     }
 
-    public Date getCreatedDateFromToken(String token) {
-        Date created;
+    public Instant getExpirationDateFromToken(String token) {
+        Instant expiration;
         try {
             final Claims claims = this.getClaimsFromToken(token);
-            created = new Date((Long) claims.get("created"));
-        } catch (Exception e) {
-            created = null;
-        }
-        return created;
-    }
-
-    public Date getExpirationDateFromToken(String token) {
-        Date expiration;
-        try {
-            final Claims claims = this.getClaimsFromToken(token);
-            expiration = claims.getExpiration();
+            expiration = claims.getExpiration().toInstant();
         } catch (Exception e) {
             expiration = null;
         }
@@ -88,18 +78,13 @@ public class TokenUtils {
         return new Date(System.currentTimeMillis());
     }
 
-    private Date generateExpirationDate() {
-        return new Date(System.currentTimeMillis() + this.expiration * 1000);
+    private Instant generateExpirationDate() {
+        return Instant.now().plusMillis(this.expiration);
     }
 
     private Boolean isTokenExpired(String token) {
-        final Date expiration = this.getExpirationDateFromToken(token);
-        return expiration.before(this.generateCurrentDate());
-    }
-
-    private Boolean isCreatedBeforeLastPasswordReset(Date created,
-                                                     Date lastPasswordReset) {
-        return (lastPasswordReset != null && created.before(lastPasswordReset));
+        final Instant expiration = this.getExpirationDateFromToken(token);
+        return expiration.compareTo(Instant.now()) < 0;
     }
 
     private String generateAudience(String device) {
@@ -131,39 +116,17 @@ public class TokenUtils {
     private String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
             .setClaims(claims)
-            .setExpiration(this.generateExpirationDate())
+            .setExpiration(Date.from(this.generateExpirationDate()))
             .signWith(SignatureAlgorithm.HS512, this.secret)
             .compact();
     }
 
-    public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
-        final Date created = this.getCreatedDateFromToken(token);
-        return (!(this.isCreatedBeforeLastPasswordReset(created,
-            lastPasswordReset)) && (!(this.isTokenExpired(token)) ||
-            this.ignoreTokenExpiration(token)));
-    }
-
-    public String refreshToken(String token) {
-        String refreshedToken;
-        try {
-            final Claims claims = this.getClaimsFromToken(token);
-            claims.put("created", this.generateCurrentDate());
-            refreshedToken = this.generateToken(claims);
-        } catch (Exception e) {
-            refreshedToken = null;
-        }
-        return refreshedToken;
-    }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         SecurityUser user = (SecurityUser) userDetails;
         final String username = this.getUsernameFromToken(token);
-        final Date created = this.getCreatedDateFromToken(token);
-        final Date expiration = this.getExpirationDateFromToken(token);
         return (username.equals(user.getUsername()) &&
-            !(this.isTokenExpired(token)) &&
-            !(this.isCreatedBeforeLastPasswordReset(created,
-                user.getLastPasswordReset())));
+            !(this.isTokenExpired(token)));
     }
 
 }

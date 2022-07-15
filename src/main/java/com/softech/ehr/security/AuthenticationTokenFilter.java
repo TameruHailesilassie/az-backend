@@ -23,7 +23,7 @@ public class AuthenticationTokenFilter
     private final TokenUtils tokenUtils;
     private final UserDetailsService userDetailsService;
 
-    @Value("${ehr.token.header}")
+    @Value("${az.access.token.header}")
     private String tokenHeader;
 
     @Override
