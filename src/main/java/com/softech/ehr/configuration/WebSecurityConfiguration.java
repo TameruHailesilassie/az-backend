@@ -22,6 +22,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Collections;
 
@@ -85,8 +87,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-            .csrf()
-            .disable()
             .exceptionHandling()
             .authenticationEntryPoint(this.unauthorizedHandler)
             .and()
@@ -109,7 +109,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .anyRequest()
             .authenticated()
             .and()
-            .cors();
+            .cors().configurationSource(corsConfigurationSource())
+            .and()
+            .csrf()
+            .disable();
 
 
         // Custom JWT based authentication
@@ -131,5 +134,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/v3/api-docs",
             "/bus/v3/api-docs/**",
             "/webjars/**");
+    }
+
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
