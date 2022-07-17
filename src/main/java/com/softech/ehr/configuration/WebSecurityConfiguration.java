@@ -109,7 +109,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .anyRequest()
             .authenticated()
             .and()
-            .cors(withDefaults());
+            .cors();
 
 
         // Custom JWT based authentication

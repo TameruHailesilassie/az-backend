@@ -17,16 +17,42 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("v1/auth")
-@CrossOrigin(origins = "*")
+@Slf4j
+@CrossOrigin(
+    // Access-Control-Allow-Origin
+    origins = { "http://localhost:4200" },
+
+    // Alternative to origins that supports more flexible originpatterns.
+    // Please, see CorsConfiguration.setAllowedOriginPatterns(List)for details.
+    // originPatterns = { "" },
+
+    // Access-Control-Allow-Credentials
+    allowCredentials = "false",
+
+    // Access-Control-Allow-Headers
+    allowedHeaders = { "*" },
+
+    // Access-Control-Expose-Headers
+    exposedHeaders = { "*" },
+
+    // Access-Control-Max-Age
+    maxAge = 60 * 30,
+
+    // Access-Control-Allow-Methods
+    methods = {RequestMethod.GET, RequestMethod.DELETE, RequestMethod.POST, RequestMethod.PUT}
+)
+
 public class AuthenticationControllerV1
     extends BaseController implements IAuthenticationController {
 
@@ -39,6 +65,7 @@ public class AuthenticationControllerV1
     public ResponseEntity<AuthDto> authenticationRequest(
         AuthPostDto authenticationRequest, HttpServletResponse response) {
 
+        log.info("login request got");
         return ResponseEntity.ok(
             this.authenticationService.authenticate(authenticationRequest,
                 response));
