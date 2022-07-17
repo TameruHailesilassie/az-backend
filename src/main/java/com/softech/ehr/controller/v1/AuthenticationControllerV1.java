@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @CrossOrigin(
     // Access-Control-Allow-Origin
-    origins = { "http://localhost:4200" },
+    origins = { "*" },
 
     // Alternative to origins that supports more flexible originpatterns.
     // Please, see CorsConfiguration.setAllowedOriginPatterns(List)for details.
