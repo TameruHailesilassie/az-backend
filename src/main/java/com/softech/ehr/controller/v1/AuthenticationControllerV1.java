@@ -12,6 +12,7 @@ import com.softech.ehr.service.impl.AuthenticationServiceImpl;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("v1/auth")
+@CrossOrigin(origins = "*")
 public class AuthenticationControllerV1
     extends BaseController implements IAuthenticationController {
 
