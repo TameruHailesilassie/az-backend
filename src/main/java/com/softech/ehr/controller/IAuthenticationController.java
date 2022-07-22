@@ -22,8 +22,8 @@ public interface IAuthenticationController {
         HttpServletResponse response);
 
     @GetMapping("/refresh")
-    ResponseEntity<?> authenticationRequest(HttpServletRequest request,
-                                            HttpServletResponse response);
+    ResponseEntity<?> authenticationRequest(
+        HttpServletRequest request, HttpServletResponse response);
 
     @PostMapping("/register")
     ResponseEntity<?> registerUser(@RequestBody @Valid UserPostDto userPostDto);

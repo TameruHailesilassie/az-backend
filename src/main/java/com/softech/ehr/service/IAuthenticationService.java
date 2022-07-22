@@ -7,7 +7,7 @@ import com.softech.ehr.dto.response.AuthDto;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public interface AuthenticationService {
+public interface IAuthenticationService {
     AuthDto authenticate(
         AuthPostDto authenticationRequest, HttpServletResponse response);
 

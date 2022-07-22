@@ -12,7 +12,7 @@ import com.softech.ehr.exception.UserAlreadyExistException;
 import com.softech.ehr.repository.RefreshTokenRepository;
 import com.softech.ehr.repository.UserRepository;
 import com.softech.ehr.security.TokenUtils;
-import com.softech.ehr.service.AuthenticationService;
+import com.softech.ehr.service.IAuthenticationService;
 
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,11 +34,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @EnableAsync
 @RequiredArgsConstructor
-public class AuthenticationServiceImpl implements AuthenticationService {
+@Slf4j
+public class AuthenticationServiceImpl implements IAuthenticationService {
 
     private final String REFRESH_COOKIE = "refresh_token";
     private final AuthenticationManager authenticationManager;
@@ -83,21 +85,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return userRepository.save(user);
     }
 
-     //TODO response time performance issue... taking around.. 7sec
     @Override
     public AuthDto refreshToken(HttpServletRequest request,
                                 HttpServletResponse response) {
 
+        log.debug("refreshing token");
+
         String rtToken = this.readCookie(request)
             .orElseThrow(() ->
                 new TokenRefreshException(
-                    "Invalid Cookie not found. Please make a new sign in request!"));
-
+                    "Cookie not found. Please make a new sign in request!"));
 
         RefreshToken refreshToken = this.refreshTokenService.getToken(rtToken)
             .orElseThrow(() ->
                 new TokenRefreshException(
-                    "Refresh Token not found. Please make a new sign in request!"));
+                    "No Record of refresh token found . Please make a new sign in request!"));
 
         RefreshToken validRefreshToken =
             this.refreshTokenService.verifyExpiration(refreshToken)
@@ -109,6 +111,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         //invalidate token
         this.refreshTokenRepository.delete(validRefreshToken);
+        log.debug("generating auth response");
         return generateAuthResponse(
             this.userDetailsService.loadUserByUsername(user.getPhoneNumber()),
             null, response);
@@ -142,10 +145,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         response.addCookie(this.crateCookie(refreshToken));
 
         //generate access token min expiry date
+        log.debug("generating access token");
         String accessToken = this.tokenUtils.generateToken(userDetails,
             authenticationRequest != null ? authenticationRequest.getDevice() :
                 "web");
 
+        log.debug("done preparing auth response");
         //generate Auth Response DTO
         return AuthDto.builder()
             .userData(userData)
@@ -154,6 +159,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     private Optional<String> readCookie(HttpServletRequest request) {
+        if (request.getCookies() == null) {
+            System.out.println("cookie  is null");
+            throw new TokenRefreshException(
+                "Invalid Cookie. Please make a new sign in request!");
+        }
         return Arrays.stream(request.getCookies())
             .filter(cookie -> REFRESH_COOKIE.equals(cookie.getName()))
             .map(Cookie::getValue)
@@ -184,6 +194,5 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             .roles(roles)
             .build();
     }
-
 
 }

@@ -77,7 +77,7 @@ public class AzExceptionAdvice {
 
     @ExceptionHandler(TokenRefreshException.class)
     public ResponseEntity<ApiErrorMessage> TokenRefreshException(
-        BadCredentialsException ex, WebRequest request) {
+        TokenRefreshException ex, WebRequest request) {
         ApiErrorMessage message = ApiErrorMessage.builder()
             .statusCode(HttpStatus.UNAUTHORIZED.value())
             .timestamp(LocalDateTime.now())

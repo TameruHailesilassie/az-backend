@@ -12,12 +12,10 @@ import com.softech.ehr.service.impl.AuthenticationServiceImpl;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,8 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AuthenticationControllerV1
     extends BaseController implements IAuthenticationController {
-
-
+    private final String REFRESH_COOKIE = "refresh_token";
     private final AuthenticationServiceImpl authenticationService;
     private final AzUserMapper userMapper;
 
@@ -50,6 +47,7 @@ public class AuthenticationControllerV1
     @GetMapping("/refresh")
     public ResponseEntity<AuthDto> authenticationRequest(
         HttpServletRequest request, HttpServletResponse response) {
+
         return ResponseEntity.ok(
             this.authenticationService.refreshToken(request, response));
     }

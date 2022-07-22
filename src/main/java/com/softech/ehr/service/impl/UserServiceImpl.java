@@ -5,7 +5,7 @@ import com.softech.ehr.dto.AzUserMapper;
 import com.softech.ehr.dto.response.UserDto;
 import com.softech.ehr.exception.NoUserFoundException;
 import com.softech.ehr.repository.UserRepository;
-import com.softech.ehr.service.UserService;
+import com.softech.ehr.service.IUserService;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,7 +19,7 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final AzUserMapper userMapper;
 

@@ -3,13 +3,12 @@ package com.softech.ehr.configuration;
 import com.softech.ehr.security.AuthenticationTokenFilter;
 import com.softech.ehr.security.EntryPointUnauthorizedHandler;
 import com.softech.ehr.security.TokenUtils;
-import com.softech.ehr.service.SecurityService;
+import com.softech.ehr.service.ISecurityService;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,13 +20,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Collections;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -36,17 +28,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final EntryPointUnauthorizedHandler unauthorizedHandler;
     private final UserDetailsService userDetailsService;
-    private final SecurityService securityService;
+    private final ISecurityService ISecurityService;
     private final TokenUtils tokenUtils;
 
     public WebSecurityConfiguration(
         EntryPointUnauthorizedHandler unauthorizedHandler,
-        UserDetailsService userDetailsService, SecurityService securityService,
+        UserDetailsService userDetailsService, ISecurityService ISecurityService,
         TokenUtils tokenUtils) {
 
         this.unauthorizedHandler = unauthorizedHandler;
         this.userDetailsService = userDetailsService;
-        this.securityService = securityService;
+        this.ISecurityService = ISecurityService;
         this.tokenUtils = tokenUtils;
     }
 
@@ -80,8 +72,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public SecurityService securityService() {
-        return this.securityService;
+    public ISecurityService securityService() {
+        return this.ISecurityService;
     }
 
     @Override
@@ -109,7 +101,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .anyRequest()
             .authenticated()
             .and()
-            .cors().configurationSource(corsConfigurationSource())
+            .cors()
             .and()
             .csrf()
             .disable();
@@ -137,14 +129,4 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*");
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
 }

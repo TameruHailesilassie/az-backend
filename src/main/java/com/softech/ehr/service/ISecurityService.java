@@ -1,6 +1,6 @@
 package com.softech.ehr.service;
 
-public interface SecurityService {
+public interface ISecurityService {
 
   Boolean hasProtectedAccess();
 

@@ -3,7 +3,7 @@ package com.softech.ehr.controller.v1;
 import com.softech.ehr.controller.BaseController;
 import com.softech.ehr.controller.IUserController;
 import com.softech.ehr.dto.response.UserDto;
-import com.softech.ehr.service.UserService;
+import com.softech.ehr.service.IUserService;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class UserControllerV1 extends BaseController implements
     IUserController {
 
-    private final UserService userService;
+    private final IUserService userService;
 
     @GetMapping("/list")
     @PreAuthorize("hasRole(@R.ADMIN)")

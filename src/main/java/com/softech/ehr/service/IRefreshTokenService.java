@@ -5,7 +5,7 @@ import com.softech.ehr.domain.entity.User;
 
 import java.util.Optional;
 
-public interface RefreshTokenService {
+public interface IRefreshTokenService {
 
     Optional<RefreshToken> getToken(String refreshToken);
 
